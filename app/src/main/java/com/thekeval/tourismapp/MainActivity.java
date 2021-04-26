@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,13 +23,16 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner spinner_countries;
     RecyclerView rv_poi;
-    TextView tvCapital;
+    TextView tvCapital, tvTotalPrice;
     ImageView ivFlag;
+    Button btnCalculate, btnReset;
+    EditText etVisitors;
 
     ArrayList<CountryModel> lstCountries;
     ArrayList<String> lstCountryNames;
     public static ArrayList<PlaceModel> currentPlaces;
     PlacesAdapter poiAdapter;
+    public static PlaceModel selectedPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         tvCapital = findViewById(R.id.tv_capital);
         ivFlag = findViewById(R.id.img_flag);
         rv_poi = findViewById(R.id.rv_poi);
+        btnCalculate = findViewById(R.id.btn_calculate);
+        btnReset = findViewById(R.id.btn_reset);
+        etVisitors = findViewById(R.id.et_visitors);
+        tvTotalPrice = findViewById(R.id.tv_totalAmount);
 
         // Initialize and fillData
         lstCountries = new ArrayList<>();
@@ -56,6 +66,29 @@ public class MainActivity extends AppCompatActivity {
         rv_poi.setAdapter(poiAdapter);
         rv_poi.setLayoutManager(new LinearLayoutManager(this));
 
+        btnCalculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (etVisitors.getText().toString().isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter number of visitors", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                double totalPrice = 0;
+
+                double price = selectedPlace.price;
+                int visitors =  Integer.parseInt(etVisitors.getText().toString());
+
+                if (visitors > 15) {
+                    totalPrice = visitors * (price * 0.05);
+                }
+                else {
+                    totalPrice = visitors * price;
+                }
+
+                tvTotalPrice.setText("$ " + totalPrice);
+            }
+        });
 
     }
 
