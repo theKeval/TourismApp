@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 int visitors =  Integer.parseInt(etVisitors.getText().toString());
 
                 if (visitors > 15) {
-                    totalPrice = visitors * (price * 0.05);
+                    totalPrice = visitors * (price - (price * 0.05));
                 }
                 else {
                     totalPrice = visitors * price;
