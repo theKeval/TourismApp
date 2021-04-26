@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<CountryModel> lstCountries;
     ArrayList<String> lstCountryNames;
-    ArrayList<PlaceModel> currentPlaces;
+    public static ArrayList<PlaceModel> currentPlaces;
     PlacesAdapter poiAdapter;
 
     @Override
@@ -51,10 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
         spinner_countries.setOnItemSelectedListener(new CountrySelectionListener());
 
-        currentPlaces = new ArrayList<>();
+        currentPlaces = lstCountries.get(0).poi;
         poiAdapter = new PlacesAdapter(this, currentPlaces);
         rv_poi.setAdapter(poiAdapter);
         rv_poi.setLayoutManager(new LinearLayoutManager(this));
+
+
     }
 
 
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void fillData() {
         ArrayList<PlaceModel> canada_poi = new ArrayList<>();
-        canada_poi.add(new PlaceModel("Niagara Falls", "niagra_falls", 100.0));
+        canada_poi.add(new PlaceModel("Niagara Falls", "niagara_falls", 100.0));
         canada_poi.add(new PlaceModel("CN Tower", "cn_tower", 30.0));
         canada_poi.add(new PlaceModel("The Butchart Gardens", "butchart_gardens", 30.0));
         canada_poi.add(new PlaceModel("Notre-Dame Basilica", "notre_dame_basilica", 50.0));
@@ -90,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
             ivFlag.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, getResources().getIdentifier(country.flag, "drawable", MainActivity.this.getPackageName())));
 
             currentPlaces = country.poi;
-            poiAdapter.notifyDataSetChanged();
+            // poiAdapter.notifyDataSetChanged();
+            poiAdapter = new PlacesAdapter(MainActivity.this, currentPlaces);
+            rv_poi.setAdapter(poiAdapter);
         }
 
         @Override
