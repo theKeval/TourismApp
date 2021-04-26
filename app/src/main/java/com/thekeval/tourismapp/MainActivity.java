@@ -2,6 +2,7 @@ package com.thekeval.tourismapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<CountryModel> lstCountries;
     ArrayList<String> lstCountryNames;
     ArrayList<PlaceModel> currentPlaces;
+    PlacesAdapter poiAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize and fillData
         lstCountries = new ArrayList<>();
         fillData();
+        lstCountryNames = new ArrayList<>();
         lstCountryNames.add("Canada"); lstCountryNames.add("USA"); lstCountryNames.add("England");
 
         ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, lstCountryNames);
@@ -48,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         spinner_countries.setOnItemSelectedListener(new CountrySelectionListener());
 
-        rv_poi.setAdapter(new PlacesAdapter(this, currentPlaces));
+        currentPlaces = new ArrayList<>();
+        poiAdapter = new PlacesAdapter(this, currentPlaces);
+        rv_poi.setAdapter(poiAdapter);
+        rv_poi.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
@@ -83,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             tvCapital.setText(country.capital);
             ivFlag.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, getResources().getIdentifier(country.flag, "drawable", MainActivity.this.getPackageName())));
 
+            currentPlaces = country.poi;
+            poiAdapter.notifyDataSetChanged();
         }
 
         @Override
